@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+require "#{File.dirname(__FILE__)}/../lib/ls_lock"
+
+if ARGV[0]
+  dir = File.join(ARGV[0], "**", "*")
+else
+  puts "Usage: Please provide path to search for locked files"
+  exit
+end
+
+locked_files = LsLock.parse_proc_locks
+
+LsLock.locked_by_pid(ARGV[0]).each do |pid,paths|
+  paths.each do |path|
+    puts "#{pid} #{path}"
+  end
+end
